@@ -118,7 +118,10 @@ class _LoginState extends State<LoginForm> {
       child: Text("Register"),
       color: null,
       onPressed: () {
-        Navigator.pushNamed(context, "/register");
+        Navigator.pushNamed(context, "/register", arguments: {
+          "test": "Test arguments"
+        });
+        // Navigator.pushNamed(context, "/register");
       },
     );
   }

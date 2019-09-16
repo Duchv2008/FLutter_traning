@@ -16,12 +16,23 @@ class UserRepository {
         "password": password
       });
 
+      final AuthenticationModel model = await RequestManager.shared.baseRequestWidthModel("api/login", HttpMethod.POST, parameter: {
+        "email": email,
+        "password": password
+      });
+
+      print("model $model");
+
       final authenModel = AuthenticationModel.fromJson(data);
 
       return authenModel;
     } catch (err) {
       throw err;
     }
+  }
+
+  Future<AuthenticationModel> refreshToken() async {
+    return null;
   }
 
   Future<void> logout() async {

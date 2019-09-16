@@ -13,38 +13,39 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final userRepository = UserRepository();
 
-    return BlocProvider<AuthenticationBloc>(
-      builder: (context) {
-        final authenticationBloc = AuthenticationBloc();
-        authenticationBloc.dispatch(AppStarted());
-        return authenticationBloc;
-      },
-      child: MaterialApp(
-        initialRoute: "/",
-        routes: {
-          '/': (context) {
-            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, state) {
-                if (state is AuthenticationUninitialized) {
-                  return Splash();
-                } else if (state is AuthenticationAuthenticated) {
-                  return HomeScreen(userRepository);
-                } else if (state is AuthenticationUnAuthenticated) {
-                  return LoginScreen(userRepository);
-                } else if (state is AuthenticationLoading) {
-                  return LoadingIndicator();
-                } else {
-                  return null;
-                }
-              },
-            );
+    return BlocProvider<AuthenticationBloc>(builder: (context) {
+      final authenticationBloc = AuthenticationBloc();
+      authenticationBloc.dispatch(AppStarted());
+      return authenticationBloc;
+    }, child: MaterialApp(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) {
+            switch (settings.name) {
+              case "/":
+                return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  builder: (contextBloc, state) {
+                    if (state is AuthenticationUninitialized) {
+                      return Splash();
+                    } else if (state is AuthenticationAuthenticated) {
+                      return HomeScreen(userRepository);
+                    } else if (state is AuthenticationUnAuthenticated) {
+                      return LoginScreen(userRepository);
+                    } else if (state is AuthenticationLoading) {
+                      return LoadingIndicator();
+                    } else {
+                      return null;
+                    }
+                  },
+                );
+              case RegisterScreen.routeName:
+                final arguments = settings.arguments;
+                return RegisterScreen();
+            }
           },
-          "/register": (context) {
-            return RegisterScreen();
-          }
-        },
-      )
-    );
+        );
+      },
+    ));
   }
 }
 
@@ -63,8 +64,8 @@ class Splash extends StatelessWidget {
 class LoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Center(
-    child: CircularProgressIndicator(
-      backgroundColor: Colors.white,
-    ),
-  );
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+        ),
+      );
 }
