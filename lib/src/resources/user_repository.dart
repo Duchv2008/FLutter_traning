@@ -10,8 +10,8 @@ class UserRepository {
   Future<AuthenticationModel> authenticate(String email, String password) async {
     print("UserRepository login $email $password");
     try {
-      final data = await RequestManager.shared
-          .baseRequest("api/login", HttpMethod.POST, parameter: {
+      final requestManager = RequestManager();
+      final data = await requestManager.baseRequest("api/login", HttpMethod.POST, parameter: {
         "email": email,
         "password": password
       });

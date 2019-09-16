@@ -15,7 +15,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   @override
   Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
     if (event is AppStarted) {
-      final bool hasToken = await AppSecurity.shared.hasToken();
+      final appSecurity =  await AppSecurity.getInstance();
+      final bool hasToken = await appSecurity.hasToken();
       print("hasToken $hasToken");
       if (hasToken) {
         yield AuthenticationAuthenticated();
@@ -27,14 +28,16 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     if (event is AppLoggedIn) {
       yield AuthenticationLoading();
       await Future.delayed(Duration(seconds: 4));
-      final _ = await AppSecurity.shared.persistToken(event.token);
+      final appSecurity =  await AppSecurity.getInstance();
+      final _ = await appSecurity.persistToken(event.token);
       yield AuthenticationAuthenticated();
     }
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
       await Future.delayed(Duration(seconds: 2));
-      final _ = await AppSecurity.shared.deleteToken();
+      final appSecurity =  await AppSecurity.getInstance();
+      final _ = await appSecurity.deleteToken();
       yield AuthenticationUnAuthenticated();
     }
   }

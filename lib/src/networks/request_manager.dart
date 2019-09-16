@@ -10,19 +10,34 @@ enum HttpMethod {
   GET, POST, PUT, DELETE
 }
 
+class TestContructor { 
+  init() async {
+    print("heheh 1");
+    await Future.delayed(Duration(seconds: 2));
+    print("heheh 2");
+  }
+}
+
 class RequestManager<T extends BaseModel> {
   static final shared = RequestManager();
   Dio dio;
   Dio dioNotAccessToken;
   BaseOptions options;
 
+  RequestManager._internal();
+
+  static Future<RequestManager> getInstance() async {
+    return RequestManager._internal();
+  }
+
   final baseUrl = "https://reqres.in/";
 
   init() async {
     dio = Dio();
     dioNotAccessToken = Dio(); // We can using this for call API not token.
-    final bool hasToken = await AppSecurity.shared.hasToken();
-    final String token = await AppSecurity.shared.token();
+    final appSecurity = await AppSecurity.getInstance();
+    final bool hasToken = await appSecurity.hasToken();
+    final String token = await appSecurity.token();
 
     if (hasToken) {
       dio.options.headers = {

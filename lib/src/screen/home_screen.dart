@@ -24,6 +24,23 @@ class HomeScreen extends StatelessWidget {
       child: BlocBuilder<LogoutBloc, LogoutState>(
         builder: (context, LogoutState state) {
           return Scaffold(
+            bottomNavigationBar: TabBar(
+              tabs: <Widget>[
+                Tab(
+                  icon: Icon(Icons.home),
+                  text: "Home",
+                ),
+                Tab(
+                  icon: Icon(Icons.home),
+                  text: "Home",
+                ),
+                Tab(
+                  icon: Icon(Icons.home),
+                  text: "Home",
+                ),
+                
+              ],
+            ),
             body: RaisedButton(
               child: Text("Logout"),
               onPressed: () {

@@ -1,17 +1,21 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSecurity {
-  static var shared = AppSecurity();
+  AppSecurity._internal();
+  static AppSecurity _instance;
 
-  SharedPreferences prefs;
+  static SharedPreferences prefs;
 
-  init() async {
-    prefs = await SharedPreferences.getInstance();
+  static Future<AppSecurity> getInstance() async {
+    if (_instance == null) {
+      prefs = await SharedPreferences.getInstance();
+      _instance = AppSecurity._internal();
+    }
+    return _instance;
   }
   
   Future<String> token() async {
-    final token = await prefs.getString("Token");
+    final token = prefs.getString("Token");
     return token;
   }
 
@@ -27,8 +31,9 @@ class AppSecurity {
   }
 
   Future<bool> hasToken() async {
+    print("hasToken");
     // write to keystore/keychain
-    String token = prefs.get("Token");
+    String token = await prefs.get("Token");
     print("SharedPreferences hasToken $token");
     if (token != null) {
       return token.isNotEmpty;
