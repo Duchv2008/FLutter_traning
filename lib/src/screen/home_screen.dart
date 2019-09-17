@@ -15,41 +15,61 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthenticationBloc authenticationBloc = BlocProvider.of(context);
-    final logoutBloc = LogoutBloc(userRepository: userRepository,
-        authenticationBloc: authenticationBloc);
-    return BlocProvider(
-      builder: (context) {
-        return logoutBloc;
+    final logoutBloc = LogoutBloc(
+        userRepository: userRepository, authenticationBloc: authenticationBloc);
+    return BlocProvider(builder: (context) {
+      return logoutBloc;
+    }, child: BlocBuilder<LogoutBloc, LogoutState>(
+      builder: (context, LogoutState state) {
+        return DefaultTabController(
+          initialIndex: 0,
+          length: 3,
+          child: SafeArea(
+            child: Scaffold(
+              // backgroundColor: Colors.white,
+              body: TabBarView(
+                children: <Widget>[
+                  Container(
+                    color: Colors.red,
+                  ),
+                  Container(
+                    color: Colors.blue,
+                  ),
+                  Container(
+                    color: Colors.red,
+                  )
+                ],
+              ),
+              bottomNavigationBar: TabBar(
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.black,
+                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorPadding: EdgeInsets.all(5.0),
+                indicatorColor: Colors.red,
+                tabs: <Widget>[
+                  Tab(
+                    icon: new Icon(Icons.home),
+                  ),
+                  Tab(
+                    icon: new Icon(Icons.rss_feed),
+                  ),
+                  Tab(
+                    icon: new Icon(Icons.perm_identity),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
       },
-      child: BlocBuilder<LogoutBloc, LogoutState>(
-        builder: (context, LogoutState state) {
-          return Scaffold(
-            bottomNavigationBar: TabBar(
-              tabs: <Widget>[
-                Tab(
-                  icon: Icon(Icons.home),
-                  text: "Home",
-                ),
-                Tab(
-                  icon: Icon(Icons.home),
-                  text: "Home",
-                ),
-                Tab(
-                  icon: Icon(Icons.home),
-                  text: "Home",
-                ),
-                
-              ],
-            ),
-            body: RaisedButton(
-              child: Text("Logout"),
-              onPressed: () {
-                logoutBloc.submitLogout();
-              },
-            ),
-          );
-        },
-      )
-    );
+    ));
   }
 }
+
+// RaisedButton(
+//               child: Text("Logout"),
+//               onPressed: () {
+//                 logoutBloc.submitLogout();
+//               },
+//             ),

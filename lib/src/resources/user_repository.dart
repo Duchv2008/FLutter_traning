@@ -8,25 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
   Future<AuthenticationModel> authenticate(String email, String password) async {
-    print("UserRepository login $email $password");
     try {
-      final requestManager = RequestManager();
-      final data = await requestManager.baseRequest("api/login", HttpMethod.POST, parameter: {
-        "email": email,
-        "password": password
+      final requestManager = await RequestManager.getInstance();
+      final Map<String, dynamic> dataJson = await requestManager.baseRequest("api/login", HttpMethod.POST, parameter: {
+        "email": "eve.holt@reqres.in",
+        "password": "cityslicka"
       });
-
-      final AuthenticationModel model = await RequestManager.shared.baseRequestWidthModel("api/login", HttpMethod.POST, parameter: {
-        "email": email,
-        "password": password
-      });
-
-      print("model $model");
-
-      final authenModel = AuthenticationModel.fromJson(data);
-
-      return authenModel;
+      print("dataJson $dataJson");
+      return AuthenticationModel.fromJson(dataJson);
     } catch (err) {
+      print("UserRepository DioError ${err.message}");
       throw err;
     }
   }

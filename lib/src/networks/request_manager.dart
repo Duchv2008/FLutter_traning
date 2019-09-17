@@ -10,54 +10,37 @@ enum HttpMethod {
   GET, POST, PUT, DELETE
 }
 
-class TestContructor { 
-  init() async {
-    print("heheh 1");
-    await Future.delayed(Duration(seconds: 2));
-    print("heheh 2");
-  }
+class Constants {
+  static const String BASE_URL = "https://reqres.in/";
+  static const String ACCESS_TOKEN_KEY = "authorization";
 }
 
-class RequestManager<T extends BaseModel> {
-  static final shared = RequestManager();
-  Dio dio;
-  Dio dioNotAccessToken;
-  BaseOptions options;
+class RequestManager {
+  final _baseUrl = Constants.BASE_URL;
+  Dio _dio;
+  Dio _dioNotAccessToken;
+  BaseOptions _options;
 
-  RequestManager._internal();
-
-  static Future<RequestManager> getInstance() async {
-    return RequestManager._internal();
-  }
-
-  final baseUrl = "https://reqres.in/";
-
-  init() async {
-    dio = Dio();
-    dioNotAccessToken = Dio(); // We can using this for call API not token.
-    final appSecurity = await AppSecurity.getInstance();
-    final bool hasToken = await appSecurity.hasToken();
-    final String token = await appSecurity.token();
-
+  RequestManager._internal({hasToken, token}) {
+    _dio = Dio();
+    _dioNotAccessToken = Dio();
     if (hasToken) {
-      dio.options.headers = {
-        "authorization": token
+      _dio.options.headers = {
+        Constants.ACCESS_TOKEN_KEY: token
       };
     }
-
     // retry request. Chưa test :v 
-    
-    // dio.interceptors.add(InterceptorsWrapper(onError: (DioError error) async {
+    // _dio.interceptors.add(InterceptorsWrapper(onError: (DioError error) async {
     //   if (error.response.statusCode == 401) {
-    //     dio.lock();
-    //     dio.interceptors.responseLock.lock();
-    //     dio.interceptors.errorLock.lock();
+    //     _dio.lock();
+    //     _dio.interceptors.responseLock.lock();
+    //     _dio.interceptors.errorLock.lock();
 
     //     AuthenticationModel response = await UserRepository().refreshToken()
     //     .whenComplete(() {
-    //       dio.unlock();
-    //       dio.interceptors.responseLock.unlock();
-    //       dio.interceptors.errorLock.unlock();
+    //       _dio.unlock();
+    //       _dio.interceptors.responseLock.unlock();
+    //       _dio.interceptors.errorLock.unlock();
     //     });
 
     //     final String token = response.token;
@@ -65,35 +48,44 @@ class RequestManager<T extends BaseModel> {
     //     options.headers = {
     //       "authorization": token
     //     };
-    //     return dio.request(options.path, options: options);
+    //     return _dio.request(options.path, options: options);
     //   }
     //   return error;
     // }));
   }
 
-  RequestManager() {
-    // TODO
-  }
-
-  Future<T> baseRequestWidthModel(String path, HttpMethod method, {Map<String, dynamic> parameter}) async {
-    Response response;
-    final String url = baseUrl + path;
-
-    try {
-      switch (method) {
-        case HttpMethod.POST:
-          response = await dio.post(url, data: parameter);
-          break;
-        default:
-          break;
-      }
-      final dataJson = json.decode(response.data);
-      final model = BaseModel.fromJson(dataJson);
-      return model;
-    } on DioError catch(e) {
-      throw e;
+  static RequestManager _instance;
+  static Future<RequestManager> getInstance() async {
+    if (_instance == null) {
+      final appSecurity = await AppSecurity.getInstance();
+      final bool hasToken = await appSecurity.hasToken();
+      final String token = await appSecurity.token();
+      _instance = RequestManager._internal(hasToken: hasToken, token: token);
     }
+    return _instance;
   }
+
+  // Future<Map<String, dynamic>> baseRequestWidthModel(String path, HttpMethod method, {Map<String, dynamic> parameter}) async {
+  //   Response response;
+  //   final String url = _baseUrl + path;
+
+  //   print("baseRequestWidthModel $url $method $parameter");
+
+  //   try {
+  //     switch (method) {
+  //       case HttpMethod.POST:
+  //       print("baseRequestWidthModel response");
+  //         response = await _dio.post(url, data: parameter);
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //     return response.data;
+  //   } on DioError catch(e) {
+  //     print("DioError ${e.message}");
+  //     throw e;
+  //   }
+  // }
 
   Future<Map<String, dynamic>> baseRequest(String path,
       HttpMethod method,
@@ -101,12 +93,12 @@ class RequestManager<T extends BaseModel> {
 
     Response response;
 
-    final String url = baseUrl + path;
+    final String url = _baseUrl + path;
 
     try {
       switch (method) {
         case HttpMethod.POST:
-          response = await dio.post(url, data: parameter);
+          response = await _dio.post(url, data: parameter);
           break;
         default:
           break;
