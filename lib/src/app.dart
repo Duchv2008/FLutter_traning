@@ -12,7 +12,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userRepository = UserRepository();
-
     return BlocProvider<AuthenticationBloc>(builder: (context) {
       final authenticationBloc = AuthenticationBloc();
       authenticationBloc.dispatch(AppStarted());
@@ -41,6 +40,8 @@ class App extends StatelessWidget {
               case RegisterScreen.routeName:
                 final arguments = settings.arguments;
                 return RegisterScreen();
+              default:
+                return null;
             }
           },
         );

@@ -7,6 +7,8 @@ import 'package:flutter_bloc_demo/src/events/logout_event.dart';
 import 'package:flutter_bloc_demo/src/resources/user_repository.dart';
 import 'package:flutter_bloc_demo/src/states/logout_state.dart';
 
+import 'account_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   final UserRepository userRepository;
 
@@ -21,43 +23,45 @@ class HomeScreen extends StatelessWidget {
       return logoutBloc;
     }, child: BlocBuilder<LogoutBloc, LogoutState>(
       builder: (context, LogoutState state) {
-        return DefaultTabController(
-          initialIndex: 0,
-          length: 3,
-          child: SafeArea(
-            child: Scaffold(
-              // backgroundColor: Colors.white,
-              body: TabBarView(
-                children: <Widget>[
-                  Container(
-                    color: Colors.red,
-                  ),
-                  Container(
-                    color: Colors.blue,
-                  ),
-                  Container(
-                    color: Colors.red,
-                  )
-                ],
-              ),
-              bottomNavigationBar: TabBar(
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.black,
-                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-                indicatorSize: TabBarIndicatorSize.label,
-                indicatorPadding: EdgeInsets.all(5.0),
-                indicatorColor: Colors.red,
-                tabs: <Widget>[
-                  Tab(
-                    icon: new Icon(Icons.home),
-                  ),
-                  Tab(
-                    icon: new Icon(Icons.rss_feed),
-                  ),
-                  Tab(
-                    icon: new Icon(Icons.perm_identity),
-                  ),
-                ],
+        return Container(
+          color: Colors.white,
+          child: DefaultTabController(
+            initialIndex: 0,
+            length: 3,
+            child: SafeArea(
+              top: false,
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                body: TabBarView(
+                  children: <Widget>[
+                    Container(
+                      color: Colors.yellow,
+                    ),
+                    Container(
+                      color: Colors.blue,
+                    ),
+                    AccountScreen()
+                  ],
+                ),
+                bottomNavigationBar: TabBar(
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.black,
+                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorPadding: EdgeInsets.all(5.0),
+                  indicatorColor: Colors.red,
+                  tabs: <Widget>[
+                    Tab(
+                      icon: new Icon(Icons.home),
+                    ),
+                    Tab(
+                      icon: new Icon(Icons.rss_feed),
+                    ),
+                    Tab(
+                      icon: new Icon(Icons.perm_identity),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -66,10 +70,3 @@ class HomeScreen extends StatelessWidget {
     ));
   }
 }
-
-// RaisedButton(
-//               child: Text("Logout"),
-//               onPressed: () {
-//                 logoutBloc.submitLogout();
-//               },
-//             ),

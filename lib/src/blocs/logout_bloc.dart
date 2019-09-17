@@ -22,8 +22,8 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   Stream<LogoutState> mapEventToState(LogoutEvent event) async* {
     if (event is PressLogout) {
       try {
-        await userRepository.logout();
         authenticationBloc.dispatch(LoggedOut());
+        await userRepository.logout();
         yield LogoutSuccess();
       } catch (err) {
         yield LogoutFail();

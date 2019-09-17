@@ -4,6 +4,14 @@ import 'package:flutter_bloc_demo/src/blocs/login_bloc.dart';
 import 'package:flutter_bloc_demo/src/states/login_state.dart';
 import 'package:flutter_bloc_demo/src/events/login_event.dart';
 
+//  typedef CallBackLogin = Function(bool isLoading);
+//  bool _isTestLoading;
+//  CallBackLogin _callBackLogin;
+//  LoginForm(bool isTestLoading, {CallBackLogin callBackLogin}) {
+//    this._isTestLoading = isTestLoading;
+//    this._callBackLogin = callBackLogin;
+//  }
+
 class LoginForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +26,7 @@ class _LoginState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, LoginState state) {
         if (state is LoginFail) {
-          _showAlert(context, "TEst");
+          _showAlert(context, state.message);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -30,11 +38,6 @@ class _LoginState extends State<LoginForm> {
                 emailTextField(loginBloc),
                 passwordTextField(loginBloc),
                 submitButton(state, loginBloc),
-                Container(
-                  child: state is LoginLoading
-                      ? CircularProgressIndicator()
-                      : null,
-                ),
                 Container(
                   child: redirectRegisterScreen(context),
                 )
@@ -50,16 +53,21 @@ class _LoginState extends State<LoginForm> {
     return showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(title: Text(message), actions: <Widget>[
-          FlatButton(
-            onPressed: () {},
-            child: Text("Cancel"),
-          ),
-          FlatButton(
-            onPressed: () {},
-            child: Text("OK"),
-          )
-        ]);
+        return AlertDialog(
+            title: Text("Error"),
+            content: Text(message),
+            actions: <Widget>[
+              Row(
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("OK"),
+                  )
+                ],
+              )
+            ]);
       },
     );
   }
@@ -70,15 +78,13 @@ class _LoginState extends State<LoginForm> {
       builder: (context, snapshot) {
         return TextField(
           decoration: InputDecoration(
-            hintText: "email@gmail.com",
-            labelText: "Email",
-            errorText: snapshot.error
-          ),
+              hintText: "email@gmail.com",
+              labelText: "Email",
+              errorText: snapshot.error),
           onChanged: bloc.changeEmail,
         );
       },
     );
-
   }
 
   Widget passwordTextField(LoginBloc bloc) {
@@ -88,10 +94,9 @@ class _LoginState extends State<LoginForm> {
         return TextField(
           obscureText: true,
           decoration: InputDecoration(
-            hintText: "Password",
-            labelText: "Password",
-            errorText: snapshot.error
-          ),
+              hintText: "Password",
+              labelText: "Password",
+              errorText: snapshot.error),
           onChanged: bloc.changePassword,
         );
       },
@@ -118,9 +123,8 @@ class _LoginState extends State<LoginForm> {
       child: Text("Register"),
       color: null,
       onPressed: () {
-        Navigator.pushNamed(context, "/register", arguments: {
-          "test": "Test arguments"
-        });
+        Navigator.pushNamed(context, "/register",
+            arguments: {"test": "Test arguments"});
         // Navigator.pushNamed(context, "/register");
       },
     );

@@ -26,16 +26,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
 
     if (event is AppLoggedIn) {
-      yield AuthenticationLoading();
-      await Future.delayed(Duration(seconds: 4));
       final appSecurity =  await AppSecurity.getInstance();
       final _ = await appSecurity.persistToken(event.token);
       yield AuthenticationAuthenticated();
     }
 
     if (event is LoggedOut) {
-      yield AuthenticationLoading();
-      await Future.delayed(Duration(seconds: 2));
       final appSecurity =  await AppSecurity.getInstance();
       final _ = await appSecurity.deleteToken();
       yield AuthenticationUnAuthenticated();

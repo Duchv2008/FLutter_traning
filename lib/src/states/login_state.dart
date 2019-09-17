@@ -14,6 +14,10 @@ class LoginSuccess extends LoginState {
 }
 
 class LoginFail extends LoginState {
+  final String message;
+
+  LoginFail(this.message);
+
   @override
   String toString() => "LoginFail";
 }
