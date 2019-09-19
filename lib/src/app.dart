@@ -2,11 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_demo/src/resources/user_repository.dart';
 import 'package:flutter_bloc_demo/src/screen/home_screen.dart';
+import 'package:flutter_bloc_demo/src/screen/home_tabbar_screen.dart';
 import 'package:flutter_bloc_demo/src/screen/login_screen.dart';
 import 'package:flutter_bloc_demo/src/events/authentication_event.dart';
 import 'package:flutter_bloc_demo/src/screen/register_screen.dart';
 import 'package:flutter_bloc_demo/src/states/authentication_state.dart';
 import 'package:flutter_bloc_demo/src/blocs/authentication_bloc.dart';
+
+//class App extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: Scaffold(
+//        appBar: AppBar(
+//          title: Text("Test Grid view"),
+//        ),
+//        body: HomeScreen(),
+//      ),
+//    );
+//  }
+//}
 
 class App extends StatelessWidget {
   @override
@@ -24,17 +39,18 @@ class App extends StatelessWidget {
               case "/":
                 return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (contextBloc, state) {
-                    if (state is AuthenticationUninitialized) {
-                      return Splash();
-                    } else if (state is AuthenticationAuthenticated) {
-                      return HomeScreen(userRepository);
-                    } else if (state is AuthenticationUnAuthenticated) {
-                      return LoginScreen(userRepository);
-                    } else if (state is AuthenticationLoading) {
-                      return LoadingIndicator();
-                    } else {
-                      return null;
-                    }
+                    return HomeScreen();
+//                    if (state is AuthenticationUninitialized) {
+//                      return Splash();
+//                    } else if (state is AuthenticationAuthenticated) {
+//                      return HomeTabbarcreen(userRepository);
+//                    } else if (state is AuhenticationUnAuthenticated) {
+//                      return LoginScreen(userRepository);
+//                    } else if (state is AuthenticationLoading) {
+//                      return LoadingIndicator();
+//                    } else {
+//                      return null;
+//                    }
                   },
                 );
               case RegisterScreen.routeName:
