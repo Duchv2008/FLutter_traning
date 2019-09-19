@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_demo/src/events/login_event.dart';
+import 'package:flutter_bloc_demo/src/models/list_video_model.dart';
 import 'package:flutter_bloc_demo/src/resources/user_repository.dart';
 import 'package:flutter_bloc_demo/src/validator/validation.dart';
 import 'package:flutter_bloc_demo/src/states/login_state.dart';
