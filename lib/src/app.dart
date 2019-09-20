@@ -5,6 +5,7 @@ import 'package:flutter_bloc_demo/src/screen/home_screen.dart';
 import 'package:flutter_bloc_demo/src/screen/home_tabbar_screen.dart';
 import 'package:flutter_bloc_demo/src/screen/login_screen.dart';
 import 'package:flutter_bloc_demo/src/events/authentication_event.dart';
+import 'package:flutter_bloc_demo/src/screen/play_video_screen.dart';
 import 'package:flutter_bloc_demo/src/screen/register_screen.dart';
 import 'package:flutter_bloc_demo/src/states/authentication_state.dart';
 import 'package:flutter_bloc_demo/src/blocs/authentication_bloc.dart';
@@ -26,6 +27,9 @@ import 'package:flutter_bloc_demo/src/blocs/authentication_bloc.dart';
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      home: PlayVideoScreen(),
+    );
     final userRepository = UserRepository();
     return BlocProvider<AuthenticationBloc>(builder: (context) {
       final authenticationBloc = AuthenticationBloc();
@@ -39,6 +43,7 @@ class App extends StatelessWidget {
               case "/":
                 return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (contextBloc, state) {
+                    return PlayVideoScreen();
                     return HomeScreen();
 //                    if (state is AuthenticationUninitialized) {
 //                      return Splash();
