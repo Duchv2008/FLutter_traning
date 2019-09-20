@@ -18,6 +18,7 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
       final videosFavorite = await videoRepository.fetchVideoFavorite(TypeVideo.favorite);
       final videosLastest = await videoRepository.fetchVideoFavorite(TypeVideo.lastest);
       final videosPopular = await videoRepository.fetchVideoFavorite(TypeVideo.popular);
+      final characters = await videoRepository.fetchVideoFavorite(TypeVideo.character);
       final categories = await videoRepository.fetchCategories();
 
       var newCategory = List<CategoryModel>();
@@ -31,6 +32,7 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
       result.add(videosFavorite);
       result.add(videosLastest);
       result.add(videosPopular);
+      result.add(characters);
 
       final ListVideoModel category = ListVideoModel();
       category.type = TypeVideo.categorypopular;

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc_demo/src/models/base_model.dart';
 
 enum TypeVideo {
-  slide, favorite, lastest, popular, categorypopular 
+  slide, character, favorite, lastest, popular, categorypopular
 }
 
 abstract class VideoItem {
