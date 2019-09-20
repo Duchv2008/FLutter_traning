@@ -31,6 +31,28 @@ class CategoryModel implements VideoItem {
 class ListVideoModel {
   TypeVideo type;
   List<VideoItem> items;
+  String title = "";
 
-  ListVideoModel({this.type, this.items});
+  ListVideoModel({this.type, this.items}) {
+   switch (this.type) {
+     case TypeVideo.lastest:
+       title = "Video mới nhất";
+       break;
+     case TypeVideo.slide:
+       title = "";
+       break;
+     case TypeVideo.character:
+       title = "Nhân vật yêu thích";
+       break;
+     case TypeVideo.favorite:
+       title = "Video yêu thích nhất";
+       break;
+     case TypeVideo.popular:
+       title = "Video phổ biến nhất";
+       break;
+     case TypeVideo.categorypopular:
+       title = "Danh mục phổ biến nhất";
+       break;
+   }
+  }
 }

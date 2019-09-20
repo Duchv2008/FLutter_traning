@@ -13,9 +13,7 @@ class VideoRepository {
       videos.add(item);
     }
 
-    final ListVideoModel favoriteVideos = ListVideoModel();
-    favoriteVideos.type = type;
-    favoriteVideos.items = videos;
+    final ListVideoModel favoriteVideos = ListVideoModel(type: type, items: videos);
     return favoriteVideos;
   }
 
